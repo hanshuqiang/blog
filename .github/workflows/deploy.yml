@@ -16,11 +16,16 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: '18'  # 根据需求选择 Node.js 版本
-
+          
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Build the project
+        run: npm run build
    
 
       - name: Deploy to server
-        uses: easingthemes/ssh-deploy@v4.1.10
+        uses: easingthemes/ssh-deploy@v5.1.0
         with:
       # Private key part of an SSH key pair
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
