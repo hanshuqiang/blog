@@ -1,0 +1,36 @@
+name: Deploy Blog App
+
+on:
+  push:
+    branches:
+      - main  # 或者你的主要分支名称
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'  # 根据需求选择 Node.js 版本7
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build the project
+        run: npm run build
+        
+      - name: Deploy
+        uses: easingthemes/ssh-deploy@main
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          ARGS: "-avz"
+          SOURCE: "dist/"
+          REMOTE_HOST: 154.83.15.173
+          REMOTE_USER: root
+          TARGET: /www/blog/
+ 
+  
