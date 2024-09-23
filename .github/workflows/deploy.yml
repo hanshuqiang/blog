@@ -1,42 +1,38 @@
-name: Deploy to Server
+name: Deploy Blog App
 
 on:
   push:
     branches:
-      - main
+      - main  # 或者你的主要分支名称
 
 jobs:
-
   deploy:
     runs-on: ubuntu-latest
-    
-    env:
-      SSH_HOST: ${{ secrets.SSH_HOST }}
-      SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
-      SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 18
-    
-    - name: Install dependencies
-      run: npm ci
-    
-    - name: Build project
-      run: npm run build
-    
-    - name: Deploy to Server
-      env:
-        SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
-      run: |
-        mkdir -p ~/.ssh
-        echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
-        ssh-keyscan -H "$SSH_HOST" >> ~/.ssh/known_hosts
-        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
-        ssh -o StrictHostKeyChecking=no $SSH_USERNAME@$SSH_HOST "rm -rf /path/to/your/project && mkdir -p /path/to/your/project"
-        scp -r dist/* $SSH_USERNAME@$SSH_HOST:/path/to/your/project
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'  # 根据需求选择 Node.js 版本
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build the project
+        run: npm run build
+
+      - name: Deploy to server
+        uses: easingthemes/ssh-deploy@v4.1.10
+        with:
+      # Private key part of an SSH key pair
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      # Remote host
+          REMOTE_HOST: ${{ secrets.SERVER_HOST }}
+      # Remote user
+          REMOTE_USER: ${{ secrets.SERVER_USER }}
+      # Source directory, path relative to `$GITHUB_WORKSPACE` root, eg: `dist/`
+          SOURCE: "dist/"
+      # Target directory
+          TARGET: ${{ secrets.SERVER_PATH }}
