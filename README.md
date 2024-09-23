@@ -1,3 +1,2 @@
 # blog
 my blog
-  g
