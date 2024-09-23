@@ -22,6 +22,19 @@ jobs:
       
       - name: Build the project
         run: npm run build
+
+         # 发布 Release （创建Release）
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }} # 仓库下的token
+        with:
+          tag_name: ${{ github.ref }} # 标签名称
+          release_name: Release ${{ github.ref }} # Release名称
+          draft: false # 是否是草稿
+          prerelease: false # 是否是预发布
+ 
       # 上传构建结果到 Release
       - name: Upload Release Asset
         id: upload-release-asset
