@@ -15,7 +15,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '18'  # 根据需求选择 Node.js 版本
+          node-version: '18'  # 根据需求选择 Node.js 版本7
 
       - name: Install dependencies
         run: npm install
