@@ -31,6 +31,7 @@ jobs:
           SERVER_HOST: ${{ secrets.SERVER_HOST }}
           SERVER_PATH: ${{ secrets.SERVER_PATH }}
         run: |
+          echo "$SERVER_HOST"
           echo "$SSH_PRIVATE_KEY" > private_key
           chmod 600 private_key
           rsync -avz -e "ssh -i private_key -o StrictHostKeyChecking=no" ./dist/ $SERVER_USER@$SERVER_HOST:$SERVER_PATH
