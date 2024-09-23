@@ -33,6 +33,6 @@ jobs:
       # Remote user
           REMOTE_USER: ${{ secrets.SERVER_USER }}
       # Source directory, path relative to `$GITHUB_WORKSPACE` root, eg: `dist/`
-          SOURCE: "/dist/"
+          SOURCE: "dist/"
       # Target directory
           TARGET: ${{ secrets.SERVER_PATH }}
