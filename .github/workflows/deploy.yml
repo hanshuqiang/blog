@@ -24,13 +24,15 @@ jobs:
         run: npm run build
 
       - name: Deploy to server
-        env:
+        uses: easingthemes/ssh-deploy@v4.1.10
+        with:
+      # Private key part of an SSH key pair
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          SERVER_USER: ${{ secrets.SERVER_USER }}
-          SERVER_HOST: ${{ secrets.SERVER_HOST }}
-          SERVER_PATH: ${{ secrets.SERVER_PATH }}
-        run: |
-          echo "$SSH_PRIVATE_KEY" > private_key
-          chmod 600 private_key
-          rsync -avz -e "ssh -i private_key -o StrictHostKeyChecking=no" ./dist/ root@154.83.15.173:/www/blog
-        
+      # Remote host
+          REMOTE_HOST: ${{ secrets.SERVER_HOST }}
+      # Remote user
+          REMOTE_USER: ${{ secrets.SERVER_USER }}
+      # Source directory, path relative to `$GITHUB_WORKSPACE` root, eg: `dist/`
+          SOURCE: "/dist/"
+      # Target directory
+          TARGET: ${{ secrets.SERVER_PATH }}
