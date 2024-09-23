@@ -22,17 +22,13 @@ jobs:
 
       - name: Build the project
         run: npm run build
-
-      - name: Deploy to server
-        uses: easingthemes/ssh-deploy@v4.1.10
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-      # Private key part of an SSH key pair
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-      # Remote host
-          REMOTE_HOST: ${{ secrets.SERVER_HOST }}
-      # Remote user
-          REMOTE_USER: ${{ secrets.SERVER_USER }}
-      # Source directory, path relative to `$GITHUB_WORKSPACE` root, eg: `dist/`
-          SOURCE: "dist/"
-      # Target directory
-          TARGET: ${{ secrets.SERVER_PATH }}
+          server: ${{ secrets.FTP_SERVER}}
+          username: ${{ secrets.FTP_NAME}}
+          password: ${{ secrets.FTP_PASSWORD}}
+          local-dir: "dist/"
+          server-dir: "/www/blog/"
+
+  
